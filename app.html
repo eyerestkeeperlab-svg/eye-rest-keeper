@@ -290,17 +290,15 @@ let cfg={sound:true,soundType:0,soundVol:70,soundRepeat:3,vibration:true,notific
 
 // ── 設定 ──
 function closeApp(){
-  try{
-    window.close();
-    // window.close()が効かない場合（ホーム画面追加済みPWA等）
-    setTimeout(()=>{
-      if(!window.closed){
-        alert('ブラウザの閉じるボタン、またはタスク一覧からアプリを終了してください。');
-      }
-    }, 500);
-  }catch(e){
-    alert('ブラウザの閉じるボタン、またはタスク一覧からアプリを終了してください。');
-  }
+  clearInterval(workTid); clearInterval(brkTid);
+  workTid=null; brkTid=null; running=false;
+  document.querySelector('.app').innerHTML =
+    '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;gap:24px;">' +
+    '<div style="font-size:48px;">👁</div>' +
+    '<div style="font-size:22px;font-weight:600;color:#e8edf8;">お疲れさまでした</div>' +
+    '<div style="font-size:14px;color:#7e8ba8;line-height:1.8;">目を大切に、良い一日を。<br>スマホのホームボタンを押すか<br>タスク一覧からアプリを閉じてください。</div>' +
+    '<button onclick="location.reload()" style="padding:14px 32px;border-radius:10px;border:1px solid #2D7DD2;background:transparent;color:#2D7DD2;font-size:15px;font-family:inherit;cursor:pointer;">↺ 再起動する</button>' +
+    '</div>';
 }
 function loadSettings(){
   try{const s=JSON.parse(localStorage.getItem('yasumicfg')||'{}');Object.assign(cfg,s);}catch(e){}
