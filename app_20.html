@@ -3,61 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#3B8C4B">
+<meta name="theme-color" content="#2D7DD2">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="やすみ番20">
-<title>目のやすみ番 20-20-20バージョン</title>
+<meta name="apple-mobile-web-app-title" content="やすみ番">
+<link rel="manifest" href="manifest.json">
+<title>目のやすみ番</title>
 <style>
 :root {
-  --bg:#080d0a;--bg2:#0f1812;--border:#1e3028;
-  --accent:#3B8C4B;--warn:#c4861a;--danger:#c44a3a;
-  --text1:#e8f0ea;--text2:#7ea88a;--text3:#3a6048;
+  --bg:#0a0d13;--bg2:#111520;--border:#1e2438;
+  --accent:#2D7DD2;--success:#3B8C4B;--warn:#c4861a;--danger:#c44a3a;
+  --text1:#e8edf8;--text2:#7e8ba8;--text3:#3a4260;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',sans-serif;background:var(--bg);color:var(--text1);overflow:hidden;}
 .app{height:100%;display:flex;flex-direction:column;max-width:480px;margin:0 auto;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);}
 .header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 10px;border-bottom:1px solid var(--border);flex-shrink:0;}
-.header-title{font-size:14px;font-weight:600;}
+.header-title{font-size:16px;font-weight:600;}
 .header-badge{font-size:11px;color:var(--accent);border:1px solid var(--accent);padding:3px 10px;border-radius:99px;}
-.page{display:none;flex:1;overflow-y:auto;padding:14px 20px;-webkit-overflow-scrolling:touch;flex-direction:column;align-items:center;}
+.page{display:none;flex:1;overflow-y:auto;padding:16px 20px;-webkit-overflow-scrolling:touch;flex-direction:column;align-items:center;}
 .page.active{display:flex;}
 .bottom-nav{display:flex;border-top:1px solid var(--border);flex-shrink:0;}
 .nav-btn{flex:1;padding:10px 4px 8px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text3);font-size:10px;font-family:inherit;}
 .nav-btn.active{color:var(--accent);}
 .nav-btn .icon{font-size:20px;}
-.rule-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;margin-bottom:14px;}
-.rule-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
-.rule-card.active{border-color:var(--accent);background:#0f2018;}
-.rule-num{font-size:32px;font-weight:300;color:var(--accent);line-height:1;margin-bottom:4px;}
-.rule-unit{font-size:11px;color:var(--text2);}
-.rule-desc{font-size:10px;color:var(--text3);margin-top:3px;}
-.ring-wrap{display:flex;flex-direction:column;align-items:center;padding:6px 0 10px;width:100%;}
-.ring-svg{width:185px;height:185px;}
+.ring-wrap{display:flex;flex-direction:column;align-items:center;padding:8px 0 16px;}
+.ring-svg{width:180px;height:180px;}
 .status-text{font-size:13px;color:var(--text2);text-align:center;margin-top:8px;}
-.alert{background:#1a2a14;border:1px solid var(--accent);border-radius:10px;padding:10px 14px;font-size:13px;color:#7ed88a;margin-bottom:10px;display:none;width:100%;text-align:center;}
+.alert{background:#2a1f08;border:1px solid var(--warn);border-radius:10px;padding:10px 14px;font-size:13px;color:#f0a830;margin-bottom:12px;display:none;width:100%;text-align:center;}
 .alert.show{display:block;}
-.btn-row{display:flex;gap:10px;margin-bottom:14px;width:100%;}
+.btn-row{display:flex;gap:10px;margin-bottom:16px;width:100%;}
 .btn{flex:1;padding:13px 8px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text1);font-size:14px;font-family:inherit;cursor:pointer;}
 .btn:active{opacity:.7;}
 .btn.primary{background:var(--accent);border-color:var(--accent);font-weight:600;}
-.btn.sm{padding:9px 14px;font-size:13px;flex:none;}
-.break-panel{display:none;width:100%;text-align:center;}
-.break-panel.show{display:block;}
-.break-title{font-size:20px;font-weight:600;color:var(--accent);margin-bottom:8px;}
-.break-instruction{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:14px;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;}
-.break-instruction strong{color:var(--accent);font-size:18px;}
-.mini-ring-wrap{display:flex;justify-content:center;margin-bottom:12px;}
+.btn.success-btn{background:var(--success);border-color:var(--success);font-weight:600;}
+.btn.sm{padding:9px 12px;font-size:13px;flex:none;}
+.ex-panel{display:none;width:100%;}
+.ex-panel.show{display:block;}
+.ex-label{font-size:11px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.ex-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.ex-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;padding:8px 4px;text-align:center;cursor:pointer;}
+.ex-card.active{border-color:var(--accent);background:#111d2e;}
+.ex-card:active{opacity:.7;}
+.ex-icon{font-size:20px;margin-bottom:3px;}
+.ex-name{font-size:11px;color:var(--text2);line-height:1.3;}
+.ex-dur{font-size:10px;color:var(--text3);margin-top:2px;}
+.ex-card.active .ex-name{color:var(--text1);}
+.ex-desc{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px;min-height:72px;width:100%;}
+.ex-progress-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:5px;width:100%;}
+.ex-progress{height:3px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:12px;width:100%;}
+.ex-progress-bar{height:100%;background:var(--accent);border-radius:99px;transition:width 1s linear;width:0%;}
+.ex-nav{display:flex;gap:8px;justify-content:flex-end;margin-bottom:16px;}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-bottom:14px;}
 .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;text-align:center;}
 .stat-num{font-size:24px;font-weight:300;color:var(--accent);}
 .stat-label{font-size:11px;color:var(--text3);margin-top:2px;}
 .section-label{font-size:11px;color:var(--text3);letter-spacing:.08em;margin-bottom:8px;align-self:flex-start;}
-.history-dots{display:flex;gap:5px;flex-wrap:wrap;align-self:flex-start;margin-bottom:14px;}
-.h-dot{width:26px;height:26px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text3);}
-.h-dot.done{background:#0f2018;border-color:var(--accent);color:var(--accent);}
+.history-dots{display:flex;gap:6px;flex-wrap:wrap;align-self:flex-start;margin-bottom:14px;}
+.h-dot{width:30px;height:30px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--text3);}
+.h-dot.done{background:#1a2f1e;border-color:#3B6D11;color:#6abf78;}
 .h-dot.skip{background:#2a1f08;border-color:var(--warn);color:#f0a830;}
-.install-hint{padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;font-size:11px;color:var(--text3);text-align:center;display:none;width:100%;}
+.install-hint{padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--text3);text-align:center;display:none;width:100%;}
 .install-hint.show{display:block;}
 .close-btn{width:100%;padding:12px;border-radius:10px;border:1px solid var(--danger,#c44a3a);background:transparent;color:var(--danger,#c44a3a);font-size:14px;font-family:inherit;cursor:pointer;margin-top:8px;}
 .close-btn:active{opacity:.7;}
@@ -75,20 +81,23 @@ html,body{height:100%;font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',s
 .toggle-slider::before{content:'';position:absolute;width:22px;height:22px;left:3px;top:3px;background:var(--text3);border-radius:50%;transition:transform .2s,background .2s;}
 .toggle input:checked+.toggle-slider{background:var(--accent);}
 .toggle input:checked+.toggle-slider::before{transform:translateX(20px);background:white;}
+
+/* Select & Range */
 .setting-select{background:var(--bg);border:1px solid var(--border);color:var(--text1);font-size:13px;font-family:inherit;padding:6px 10px;border-radius:8px;margin-left:10px;flex-shrink:0;max-width:140px;}
 .range-row{padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;}
 .range-label{display:flex;justify-content:space-between;font-size:13px;color:var(--text1);margin-bottom:8px;}
 .range-label span{font-size:13px;color:var(--accent);font-weight:600;}
 input[type=range]{width:100%;accent-color:var(--accent);height:4px;}
+
 .test-btn{width:100%;padding:11px;border-radius:10px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:13px;font-family:inherit;cursor:pointer;margin-top:4px;}
 .test-btn:active{opacity:.7;}
 .perm-btn{width:100%;padding:12px;border-radius:10px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:13px;font-family:inherit;cursor:pointer;margin-top:4px;}
 .perm-btn:active{opacity:.7;}
 .perm-status{font-size:11px;color:var(--text3);text-align:center;margin-top:6px;}
-.perm-status.granted{color:var(--accent);}
+.perm-status.granted{color:var(--success);}
 .perm-status.denied{color:var(--danger);}
 .about-card{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;}
-.about-app{font-size:16px;font-weight:600;color:var(--accent);margin-bottom:4px;}
+.about-app{font-size:18px;font-weight:600;color:var(--accent);margin-bottom:4px;}
 .about-ver{font-size:12px;color:var(--text3);margin-bottom:12px;}
 .about-desc{font-size:13px;color:var(--text2);line-height:1.7;}
 </style>
@@ -96,26 +105,21 @@ input[type=range]{width:100%;accent-color:var(--accent);height:4px;}
 <body>
 <div class="app">
   <div class="header">
-    <div class="header-title">👁 目のやすみ番 20-20-20バージョン</div>
-    <div class="header-badge">20-20-20ルール</div>
+    <div class="header-title">👁 目のやすみ番</div>
+    <div class="header-badge">55分サイクル</div>
   </div>
 
   <!-- Main Page -->
   <div class="page active" id="pageMain">
-    <div class="rule-cards">
-      <div class="rule-card active"><div class="rule-num">20</div><div class="rule-unit">分ごとに</div><div class="rule-desc">作業したら</div></div>
-      <div class="rule-card"><div class="rule-num">20</div><div class="rule-unit">フィート先</div><div class="rule-desc">約6m以上</div></div>
-      <div class="rule-card"><div class="rule-num">20</div><div class="rule-unit">秒間</div><div class="rule-desc">見つめる</div></div>
-    </div>
     <div class="ring-wrap">
-      <svg class="ring-svg" viewBox="0 0 200 200">
-        <circle cx="100" cy="100" r="80" fill="none" stroke="var(--border)" stroke-width="10"/>
-        <circle cx="100" cy="100" r="80" fill="none" id="arc"
-          stroke="var(--accent)" stroke-width="10" stroke-dasharray="502.7" stroke-dashoffset="0"
-          stroke-linecap="round" transform="rotate(-90 100 100)"/>
-        <text x="100" y="92" text-anchor="middle" font-size="36" font-weight="300"
-          fill="var(--text1)" font-family="-apple-system,sans-serif" id="timeText">20:00</text>
-        <text x="100" y="116" text-anchor="middle" font-size="12"
+      <svg class="ring-svg" viewBox="0 0 180 180">
+        <circle cx="90" cy="90" r="72" fill="none" stroke="var(--border)" stroke-width="10"/>
+        <circle cx="90" cy="90" r="72" fill="none" id="arc"
+          stroke="var(--accent)" stroke-width="10" stroke-dasharray="452.4" stroke-dashoffset="0"
+          stroke-linecap="round" transform="rotate(-90 90 90)"/>
+        <text x="90" y="86" text-anchor="middle" font-size="28" font-weight="300"
+          fill="var(--text1)" font-family="-apple-system,sans-serif" id="timeText">55:00</text>
+        <text x="90" y="106" text-anchor="middle" font-size="12"
           fill="var(--text2)" font-family="-apple-system,sans-serif" id="subText">作業中</text>
       </svg>
       <div class="status-text" id="statusText">開始ボタンで計測スタート</div>
@@ -126,33 +130,26 @@ input[type=range]{width:100%;accent-color:var(--accent);height:4px;}
       <button class="btn" onclick="resetTimer()">↺ リセット</button>
       <button class="btn sm" id="skipBtn" style="display:none" onclick="skipBreak()">スキップ</button>
     </div>
-    <div class="break-panel" id="breakPanel">
-      <div class="break-title">👁 目を休めましょう</div>
-      <div class="break-instruction">
-        窓の外や遠い壁など<br>
-        <strong>6m以上先</strong>を<br>
-        <strong id="countdownNum">20</strong>秒間 見つめてください
+    <div class="ex-panel" id="exPanel">
+      <div class="ex-label">体操メニュー（自動進行）</div>
+      <div class="ex-grid" id="exGrid"></div>
+      <div class="ex-desc" id="exDesc">メニューを選んでください</div>
+      <div class="ex-progress-row">
+        <span id="exTimeLabel">残り 0:00</span>
+        <span id="exTotalLabel">合計 0:00 / 5:00</span>
       </div>
-      <div class="mini-ring-wrap">
-        <svg width="120" height="120" viewBox="0 0 120 120">
-          <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border)" stroke-width="8"/>
-          <circle cx="60" cy="60" r="50" fill="none" id="miniArc"
-            stroke="var(--accent)" stroke-width="8" stroke-dasharray="314.2" stroke-dashoffset="0"
-            stroke-linecap="round" transform="rotate(-90 60 60)"/>
-          <text x="60" y="68" text-anchor="middle" font-size="32" font-weight="300"
-            fill="var(--text1)" font-family="-apple-system,sans-serif" id="miniTime">20</text>
-        </svg>
-      </div>
-      <div class="btn-row">
-        <button class="btn primary" onclick="finishBreak()">✓ 完了</button>
-        <button class="btn" onclick="skipBreak()">スキップ</button>
+      <div class="ex-progress"><div class="ex-progress-bar" id="exBar"></div></div>
+      <div class="ex-nav">
+        <button class="btn sm" onclick="prevEx()">← 前</button>
+        <button class="btn sm" id="nextBtn" onclick="nextEx()">次 →</button>
+        <button class="btn sm success-btn" id="doneBtn" style="display:none" onclick="finishBreak()">✓ 完了</button>
       </div>
     </div>
     <div class="stats">
-      <div class="stat-card"><div class="stat-num" id="cycleCount">0</div><div class="stat-label">本日の休憩回数</div></div>
+      <div class="stat-card"><div class="stat-num" id="doneCount">0</div><div class="stat-label">本日の体操回数</div></div>
       <div class="stat-card"><div class="stat-num" id="skipCount">0</div><div class="stat-label">スキップ回数</div></div>
     </div>
-    <div class="section-label">本日の記録（最大12回）</div>
+    <div class="section-label">本日の記録</div>
     <div class="history-dots" id="historyDots"></div>
     <div class="install-hint" id="installHint">
       📱 ホーム画面に追加するとアプリのように使えます<br>
@@ -165,8 +162,10 @@ input[type=range]{width:100%;accent-color:var(--accent);height:4px;}
   <!-- Settings Page -->
   <div class="page" id="pageSettings">
 
+    <!-- 音の設定 -->
     <div class="settings-section">
       <div class="settings-title">🔔 音の設定</div>
+
       <div class="setting-row">
         <div class="setting-info">
           <div class="setting-name">音で知らせる</div>
@@ -174,6 +173,7 @@ input[type=range]{width:100%;accent-color:var(--accent);height:4px;}
         </div>
         <label class="toggle"><input type="checkbox" id="toggleSound" checked onchange="saveSetting()"><span class="toggle-slider"></span></label>
       </div>
+
       <div class="setting-row">
         <div class="setting-info"><div class="setting-name">音の種類</div></div>
         <select class="setting-select" id="soundType" onchange="saveSetting()">
@@ -189,17 +189,21 @@ input[type=range]{width:100%;accent-color:var(--accent);height:4px;}
           <option value="9">メロディー</option>
         </select>
       </div>
+
       <div class="range-row">
         <div class="range-label">音の大きさ<span id="volVal">70%</span></div>
         <input type="range" id="soundVol" min="10" max="100" value="70" step="5" oninput="document.getElementById('volVal').textContent=this.value+'%'" onchange="saveSetting()">
       </div>
+
       <div class="range-row">
         <div class="range-label">繰り返し回数<span id="repeatVal">3回</span></div>
         <input type="range" id="soundRepeat" min="1" max="10" value="3" step="1" oninput="document.getElementById('repeatVal').textContent=this.value+'回'" onchange="saveSetting()">
       </div>
+
       <button class="test-btn" onclick="testSound()">▶ テスト再生</button>
     </div>
 
+    <!-- バイブ・通知 -->
     <div class="settings-section">
       <div class="settings-title">📳 バイブ・通知</div>
       <div class="setting-row">
@@ -220,12 +224,13 @@ input[type=range]{width:100%;accent-color:var(--accent);height:4px;}
       <div class="perm-status" id="permStatus">状態を確認中...</div>
     </div>
 
+    <!-- アプリについて -->
     <div class="settings-section">
       <div class="settings-title">アプリについて</div>
       <div class="about-card">
-        <div class="about-app">目のやすみ番 20-20-20バージョン</div>
-        <div class="about-ver">Ver 1.0.0  |  Eye Rest Keeper Lab</div>
-        <div class="about-desc">20分作業したら20秒間6m先を見つめる「20-20-20ルール」に基づいた目の休憩タイマーです。眼科医推奨のシンプルな目のケア習慣をサポートします。</div>
+        <div class="about-app">目のやすみ番</div>
+        <div class="about-ver">Ver 1.2.0  |  Eye Rest Keeper Lab</div>
+        <div class="about-desc">55分作業したら5分間の目の体操を自動でお知らせするアプリです。6種類の体操メニューが自動で順番に進行します。</div>
       </div>
     </div>
   </div>
@@ -238,46 +243,65 @@ input[type=range]{width:100%;accent-color:var(--accent);height:4px;}
 </div>
 
 <script>
-const WORK=20*60, BREAK=20;
-const CIRC=2*Math.PI*80, MINI_CIRC=2*Math.PI*50;
+const WORK=55*60, BREAK=5*60;
+const CIRC=2*Math.PI*72;
 
-const SOUND_PATTERNS=[
+const EXERCISES=[
+  {icon:'👁️',name:'遠くを見る',  dur:60,desc:'窓の外や遠い壁の一点を見つめます。6m以上先を20秒以上見るのが理想です。目のピント調節筋をリラックスさせます。'},
+  {icon:'↕️',name:'上下左右',    dur:60,desc:'頭を動かさず目だけをゆっくり上→下→左→右に動かします。各方向5回繰り返します。'},
+  {icon:'🔄',name:'ぐるぐる回す',dur:60,desc:'目をゆっくり時計回りに1周、次に反時計回りに1周させます。各3回。めまいを感じたら止めてください。'},
+  {icon:'💧',name:'まばたき',     dur:30,desc:'意識的にゆっくり10回まばたきします。PC作業中はまばたきが減り目が乾燥します。涙の膜を整えます。'},
+  {icon:'🙌',name:'手のひら温め', dur:30,desc:'両手をこすり合わせて温め、閉じた目の上にそっと当てます。暗さと温かさで緊張がほぐれます。'},
+  {icon:'🧘',name:'首・肩ほぐし', dur:60,desc:'首をゆっくり左右に傾け、肩を前後に回します。目の疲れは首肩こりと連動しています。'},
+];
+
+// 10種類の音パターン定義
+const SOUND_PATTERNS = [
+  // 0: ビープ音（上昇）
   [[600,.25],[800,.25],[1000,.25],[1200,.35]],
+  // 1: ビープ音（3連）
   [[1000,.2],[1000,.2],[1000,.3]],
+  // 2: チャイム
   [[523,.4],[659,.4],[784,.4],[1047,.6]],
+  // 3: ピンポン
   [[880,.15],[440,.15],[880,.15],[440,.2]],
+  // 4: アラーム
   [[800,.1],[600,.1],[800,.1],[600,.1],[800,.1],[600,.15]],
+  // 5: 穏やかな音
   [[440,.5],[494,.5],[523,.8]],
+  // 6: 電子音
   [[1200,.05],[900,.05],[1200,.05],[900,.05],[1200,.1]],
+  // 7: 高音ビープ
   [[1500,.2],[1800,.2],[2000,.3]],
+  // 8: 低音ビープ
   [[200,.3],[250,.3],[300,.4]],
+  // 9: メロディー
   [[523,.2],[659,.2],[784,.2],[659,.2],[784,.2],[1047,.4]],
 ];
 
 let running=false,inBreak=false;
-let workRemain=WORK,brkRemain=BREAK;
+let workRemain=WORK,brkRemain=BREAK,exRemain=0,curEx=0;
 let workTid=null,brkTid=null;
-let doneCount=0,skipCountN=0;
+let doneCountN=0,skipCountN=0;
 let history=[];
 let workStartAt=null,workSavedRemain=WORK;
 let breakStartAt=null;
 let cfg={sound:true,soundType:0,soundVol:70,soundRepeat:3,vibration:true,notification:false};
 
+// ── 設定 ──
 function closeApp(){
-  try{
-    window.close();
-    // window.close()が効かない場合（ホーム画面追加済みPWA等）
-    setTimeout(()=>{
-      if(!window.closed){
-        alert('ブラウザの閉じるボタン、またはタスク一覧からアプリを終了してください。');
-      }
-    }, 500);
-  }catch(e){
-    alert('ブラウザの閉じるボタン、またはタスク一覧からアプリを終了してください。');
-  }
+  clearInterval(workTid); clearInterval(brkTid);
+  workTid=null; brkTid=null; running=false;
+  document.querySelector('.app').innerHTML =
+    '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;gap:24px;">' +
+    '<div style="font-size:48px;">👁</div>' +
+    '<div style="font-size:22px;font-weight:600;color:#e8edf8;">お疲れさまでした</div>' +
+    '<div style="font-size:14px;color:#7e8ba8;line-height:1.8;">目を大切に、良い一日を。<br>スマホのホームボタンを押すか<br>タスク一覧からアプリを閉じてください。</div>' +
+    '<button onclick="location.reload()" style="padding:14px 32px;border-radius:10px;border:1px solid #2D7DD2;background:transparent;color:#2D7DD2;font-size:15px;font-family:inherit;cursor:pointer;">↺ 再起動する</button>' +
+    '</div>';
 }
 function loadSettings(){
-  try{const s=JSON.parse(localStorage.getItem('2020cfg')||'{}');Object.assign(cfg,s);}catch(e){}
+  try{const s=JSON.parse(localStorage.getItem('yasumicfg')||'{}');Object.assign(cfg,s);}catch(e){}
   document.getElementById('toggleSound').checked=cfg.sound;
   document.getElementById('soundType').value=cfg.soundType;
   document.getElementById('soundVol').value=cfg.soundVol;
@@ -295,7 +319,7 @@ function saveSetting(){
   cfg.soundRepeat=parseInt(document.getElementById('soundRepeat').value);
   cfg.vibration=document.getElementById('toggleVibration').checked;
   cfg.notification=document.getElementById('toggleNotif').checked;
-  try{localStorage.setItem('2020cfg',JSON.stringify(cfg));}catch(e){}
+  try{localStorage.setItem('yasumicfg',JSON.stringify(cfg));}catch(e){}
 }
 function onNotifToggle(){saveSetting();if(cfg.notification)requestNotifPermission();}
 function updatePermStatus(){
@@ -312,7 +336,8 @@ async function requestNotifPermission(){
   updatePermStatus();
 }
 
-function playSound(patternIdx,vol,repeat){
+// ── 音再生 ──
+function playSound(patternIdx, vol, repeat){
   try{
     const ctx=new(window.AudioContext||window.webkitAudioContext)();
     const pattern=SOUND_PATTERNS[patternIdx]||SOUND_PATTERNS[0];
@@ -328,25 +353,30 @@ function playSound(patternIdx,vol,repeat){
         o.start(t);o.stop(t+dur);
         t+=dur+0.04;
       });
-      t+=0.1;
+      t+=0.1; // 繰り返し間隔
     }
   }catch(e){}
 }
-function testSound(){playSound(cfg.soundType,cfg.soundVol,cfg.soundRepeat);}
+function testSound(){
+  playSound(cfg.soundType, cfg.soundVol, cfg.soundRepeat);
+}
 function notify(type){
   if(cfg.sound){
-    if(type==='alert') playSound(cfg.soundType,cfg.soundVol,cfg.soundRepeat);
-    else if(type==='done') playSound(cfg.soundType,cfg.soundVol,Math.min(2,cfg.soundRepeat));
+    if(type==='alert') playSound(cfg.soundType, cfg.soundVol, cfg.soundRepeat);
+    else if(type==='done') playSound(cfg.soundType, cfg.soundVol, Math.min(2,cfg.soundRepeat));
+    else if(type==='next') playSound(cfg.soundType, cfg.soundVol*0.5, 1);
   }
   if(cfg.vibration&&navigator.vibrate){
     if(type==='alert') navigator.vibrate([300,100,300,100,500]);
     else if(type==='done') navigator.vibrate([200,100,200]);
+    else navigator.vibrate(80);
   }
   if(type==='alert'&&cfg.notification&&'Notification' in window&&Notification.permission==='granted'){
-    new Notification('目のやすみ番 20-20-20',{body:'20分経過！6m先を20秒見てください👁',requireInteraction:true});
+    new Notification('目のやすみ番',{body:'55分経過！目の体操をしましょう👁',requireInteraction:true});
   }
 }
 
+// ── ページ切替 ──
 function showPage(name){
   document.getElementById('pageMain').classList.toggle('active',name==='main');
   document.getElementById('pageSettings').classList.toggle('active',name==='settings');
@@ -355,9 +385,10 @@ function showPage(name){
   if(name==='settings')updatePermStatus();
 }
 
+// ── 初期化 ──
 function initDots(){
   const w=document.getElementById('historyDots');w.innerHTML='';
-  for(let i=0;i<12;i++){const d=document.createElement('div');d.className='h-dot';d.textContent='—';w.appendChild(d);}
+  for(let i=0;i<8;i++){const d=document.createElement('div');d.className='h-dot';d.textContent='—';w.appendChild(d);}
 }
 initDots();
 
@@ -368,77 +399,95 @@ function updateArc(remain,total,color){
   arc.setAttribute('stroke-dashoffset',offset.toFixed(1));
   arc.setAttribute('stroke',color);
 }
-function updateMiniArc(remain){
-  const offset=MINI_CIRC*(1-remain/BREAK);
-  document.getElementById('miniArc').setAttribute('stroke-dashoffset',offset.toFixed(1));
-  document.getElementById('miniTime').textContent=remain;
-  document.getElementById('countdownNum').textContent=remain;
-}
-function showAlert(msg,ms=5000){
+function showAlert(msg,ms=7000){
   const bar=document.getElementById('alertBar');
-  bar.textContent='🌿 '+msg;bar.classList.add('show');
+  bar.textContent='🔔 '+msg;bar.classList.add('show');
   if(ms)setTimeout(()=>bar.classList.remove('show'),ms);
 }
-function updateStats(){
-  document.getElementById('cycleCount').textContent=doneCount;
-  document.getElementById('skipCount').textContent=skipCountN;
+
+// ── 体操グリッド ──
+function buildExGrid(){
+  document.getElementById('exGrid').innerHTML=EXERCISES.map((e,i)=>`
+    <div class="ex-card${i===curEx?' active':''}" onclick="selectEx(${i})">
+      <div class="ex-icon">${e.icon}</div>
+      <div class="ex-name">${e.name}</div>
+      <div class="ex-dur">${e.dur}秒</div>
+    </div>`).join('');
+  document.getElementById('exDesc').textContent=EXERCISES[curEx].desc;
+  const isLast=curEx===EXERCISES.length-1;
+  document.getElementById('nextBtn').style.display=isLast?'none':'';
+  document.getElementById('doneBtn').style.display=isLast?'':'none';
 }
-function updateHistory(){
-  const dots=document.getElementById('historyDots').querySelectorAll('.h-dot');
-  history.forEach((h,i)=>{
-    if(i<dots.length){dots[i].className='h-dot '+(h==='done'?'done':'skip');dots[i].textContent=h==='done'?'✓':'–';}
-  });
+function selectEx(i){curEx=i;exRemain=EXERCISES[i].dur;buildExGrid();updateExProgress();}
+function prevEx(){if(curEx>0){curEx--;exRemain=EXERCISES[curEx].dur;buildExGrid();updateExProgress();}}
+function nextEx(){if(curEx<EXERCISES.length-1){curEx++;exRemain=EXERCISES[curEx].dur;buildExGrid();updateExProgress();notify('next');}}
+function updateExProgress(){
+  const dur=EXERCISES[curEx].dur;
+  const elapsed=dur-exRemain;
+  const brkElapsed=BREAK-brkRemain;
+  document.getElementById('exTimeLabel').textContent='残り '+fmt(exRemain);
+  document.getElementById('exTotalLabel').textContent=`合計 ${fmt(brkElapsed)} / 5:00`;
+  document.getElementById('exBar').style.width=(elapsed/dur*100).toFixed(1)+'%';
 }
 
+// ── タイマー ──
 function workTick(){
   if(workStartAt){const elapsed=Math.floor((Date.now()-workStartAt)/1000);workRemain=Math.max(0,workSavedRemain-elapsed);}
   document.getElementById('timeText').textContent=fmt(workRemain);
-  updateArc(workRemain,WORK,'#3B8C4B');
+  updateArc(workRemain,WORK,'#2D7DD2');
   if(workRemain<=0){clearInterval(workTid);workTid=null;startBreak();}
 }
 function breakTick(){
-  if(breakStartAt){const elapsed=Math.floor((Date.now()-breakStartAt)/1000);brkRemain=Math.max(0,BREAK-elapsed);}
-  updateMiniArc(brkRemain);
+  if(breakStartAt){
+    const elapsed=Math.floor((Date.now()-breakStartAt)/1000);
+    brkRemain=Math.max(0,BREAK-elapsed);
+    exRemain=Math.max(0,exRemain-1);
+  }
+  document.getElementById('timeText').textContent=fmt(brkRemain);
   updateArc(brkRemain,BREAK,'#3B8C4B');
+  updateExProgress();
+  if(exRemain<=0&&curEx<EXERCISES.length-1){curEx++;exRemain=EXERCISES[curEx].dur;buildExGrid();notify('next');}
   if(brkRemain<=0){clearInterval(brkTid);brkTid=null;finishBreak();}
 }
-
 function startBreak(){
-  inBreak=true;brkRemain=BREAK;breakStartAt=Date.now();
+  inBreak=true;curEx=0;brkRemain=BREAK;exRemain=EXERCISES[0].dur;breakStartAt=Date.now();
   showPage('main');
-  document.getElementById('breakPanel').classList.add('show');
+  document.getElementById('exPanel').classList.add('show');
   document.getElementById('skipBtn').style.display='';
   document.getElementById('alertBar').classList.remove('show');
-  document.getElementById('timeText').textContent='0:20';
-  document.getElementById('subText').textContent='休憩中';
-  document.getElementById('statusText').textContent='遠くを見て目を休めましょう👁';
-  updateArc(BREAK,BREAK,'#3B8C4B');updateMiniArc(BREAK);
+  document.getElementById('subText').textContent='体操中';
+  document.getElementById('statusText').textContent='目を休めましょう — 5分間の体操タイム';
+  updateArc(BREAK,BREAK,'#3B8C4B');
+  buildExGrid();updateExProgress();
   notify('alert');
-  brkTid=setInterval(breakTick,500);
+  showAlert('55分経過！目の体操をしましょう',0);
+  brkTid=setInterval(breakTick,1000);
 }
 function finishBreak(){
   clearInterval(brkTid);brkTid=null;inBreak=false;breakStartAt=null;
-  doneCount++;history.push('done');updateStats();updateHistory();
-  document.getElementById('breakPanel').classList.remove('show');
+  doneCountN++;history.push('done');updateStats();updateHistory();
+  document.getElementById('exPanel').classList.remove('show');
   document.getElementById('skipBtn').style.display='none';
+  document.getElementById('alertBar').classList.remove('show');
   workRemain=WORK;workSavedRemain=WORK;
   document.getElementById('timeText').textContent=fmt(WORK);
   document.getElementById('subText').textContent='作業中';
-  updateArc(WORK,WORK,'#3B8C4B');
-  document.getElementById('statusText').textContent='お疲れさまでした！また20分後にお知らせします';
-  showAlert('休憩完了！また20分後にお知らせします');
+  updateArc(WORK,WORK,'#2D7DD2');
+  document.getElementById('statusText').textContent='お疲れさまでした！次まで55分あります';
+  showAlert('体操完了！次まで55分、集中して大丈夫です 💪');
   notify('done');
   if(running){workStartAt=Date.now();workSavedRemain=WORK;workTid=setInterval(workTick,1000);}
 }
 function skipBreak(){
   clearInterval(brkTid);brkTid=null;inBreak=false;breakStartAt=null;
   skipCountN++;history.push('skip');updateStats();updateHistory();
-  document.getElementById('breakPanel').classList.remove('show');
+  document.getElementById('exPanel').classList.remove('show');
   document.getElementById('skipBtn').style.display='none';
+  document.getElementById('alertBar').classList.remove('show');
   workRemain=WORK;workSavedRemain=WORK;
   document.getElementById('timeText').textContent=fmt(WORK);
   document.getElementById('subText').textContent='作業中';
-  updateArc(WORK,WORK,'#3B8C4B');
+  updateArc(WORK,WORK,'#2D7DD2');
   document.getElementById('statusText').textContent='作業中 — スキップしました';
   if(running){workStartAt=Date.now();workSavedRemain=WORK;workTid=setInterval(workTick,1000);}
 }
@@ -448,7 +497,7 @@ function toggleTimer(){
   const btn=document.getElementById('startBtn');
   if(running){
     btn.textContent='⏸ 一時停止';btn.className='btn';
-    document.getElementById('statusText').textContent='作業中 — 20分後にお知らせします';
+    document.getElementById('statusText').textContent='作業中 — 集中して大丈夫です';
     document.getElementById('alertBar').classList.remove('show');
     workStartAt=Date.now();workSavedRemain=workRemain;
     workTid=setInterval(workTick,1000);
@@ -466,13 +515,23 @@ function resetTimer(){
   workRemain=WORK;workSavedRemain=WORK;workStartAt=null;breakStartAt=null;
   document.getElementById('startBtn').textContent='▶ 開始';
   document.getElementById('startBtn').className='btn primary';
-  document.getElementById('timeText').textContent='20:00';
+  document.getElementById('timeText').textContent='55:00';
   document.getElementById('subText').textContent='作業中';
   document.getElementById('statusText').textContent='開始ボタンで計測スタート';
-  document.getElementById('breakPanel').classList.remove('show');
+  document.getElementById('exPanel').classList.remove('show');
   document.getElementById('skipBtn').style.display='none';
   document.getElementById('alertBar').classList.remove('show');
-  updateArc(WORK,WORK,'#3B8C4B');
+  updateArc(WORK,WORK,'#2D7DD2');
+}
+function updateStats(){
+  document.getElementById('doneCount').textContent=doneCountN;
+  document.getElementById('skipCount').textContent=skipCountN;
+}
+function updateHistory(){
+  const dots=document.getElementById('historyDots').querySelectorAll('.h-dot');
+  history.forEach((h,i)=>{
+    if(i<dots.length){dots[i].className='h-dot '+(h==='done'?'done':'skip');dots[i].textContent=h==='done'?'✓':'–';}
+  });
 }
 document.addEventListener('visibilitychange',()=>{
   if(document.visibilityState==='visible'){
@@ -480,13 +539,14 @@ document.addEventListener('visibilitychange',()=>{
       const elapsed=Math.floor((Date.now()-workStartAt)/1000);
       workRemain=Math.max(0,workSavedRemain-elapsed);
       document.getElementById('timeText').textContent=fmt(workRemain);
-      updateArc(workRemain,WORK,'#3B8C4B');
+      updateArc(workRemain,WORK,'#2D7DD2');
       if(workRemain<=0){clearInterval(workTid);workTid=null;startBreak();}
     }
     if(inBreak&&breakStartAt){
       const elapsed=Math.floor((Date.now()-breakStartAt)/1000);
       brkRemain=Math.max(0,BREAK-elapsed);
-      updateMiniArc(brkRemain);
+      document.getElementById('timeText').textContent=fmt(brkRemain);
+      updateArc(brkRemain,BREAK,'#3B8C4B');
       if(brkRemain<=0){clearInterval(brkTid);brkTid=null;finishBreak();}
     }
   }
@@ -494,7 +554,7 @@ document.addEventListener('visibilitychange',()=>{
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) document.getElementById('installHint').classList.add('show');
 loadSettings();
-updateArc(WORK,WORK,'#3B8C4B');
+updateArc(WORK,WORK,'#2D7DD2');
 </script>
 </body>
 </html>
