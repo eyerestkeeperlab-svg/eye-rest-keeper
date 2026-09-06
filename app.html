@@ -65,6 +65,8 @@ html,body{height:100%;font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',s
 .h-dot.skip{background:#2a1f08;border-color:var(--warn);color:#f0a830;}
 .install-hint{padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--text3);text-align:center;display:none;width:100%;}
 .install-hint.show{display:block;}
+.close-btn{width:100%;padding:12px;border-radius:10px;border:1px solid var(--danger,#c44a3a);background:transparent;color:var(--danger,#c44a3a);font-size:14px;font-family:inherit;cursor:pointer;margin-top:8px;}
+.close-btn:active{opacity:.7;}
 
 /* Settings */
 .settings-section{width:100%;margin-bottom:20px;}
@@ -154,6 +156,7 @@ input[type=range]{width:100%;accent-color:var(--accent);height:4px;}
       Safari：共有ボタン →「ホーム画面に追加」<br>
       Chrome：メニュー →「アプリをインストール」
     </div>
+    <button class="close-btn" onclick="closeApp()">✕ アプリを終了する</button>
   </div>
 
   <!-- Settings Page -->
@@ -286,6 +289,19 @@ let breakStartAt=null;
 let cfg={sound:true,soundType:0,soundVol:70,soundRepeat:3,vibration:true,notification:false};
 
 // ── 設定 ──
+function closeApp(){
+  try{
+    window.close();
+    // window.close()が効かない場合（ホーム画面追加済みPWA等）
+    setTimeout(()=>{
+      if(!window.closed){
+        alert('ブラウザの閉じるボタン、またはタスク一覧からアプリを終了してください。');
+      }
+    }, 500);
+  }catch(e){
+    alert('ブラウザの閉じるボタン、またはタスク一覧からアプリを終了してください。');
+  }
+}
 function loadSettings(){
   try{const s=JSON.parse(localStorage.getItem('yasumicfg')||'{}');Object.assign(cfg,s);}catch(e){}
   document.getElementById('toggleSound').checked=cfg.sound;
