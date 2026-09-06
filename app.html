@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#2D7DD2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="やすみ番">
+<link rel="manifest" href="manifest.json">
+<title>目のやすみ番</title>
+<style>
+:root {
+  --bg:      #0a0d13;
+  --bg2:     #111520;
+  --bg3:     #181c2a;
+  --border:  #1e2438;
+  --accent:  #2D7DD2;
+  --success: #3B8C4B;
+  --warn:    #c4861a;
+  --danger:  #c44a3a;
+  --text1:   #e8edf8;
+  --text2:   #7e8ba8;
+  --text3:   #3a4260;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  height: 100%;
+  font-family: -apple-system, 'Hiragino Sans', 'Yu Gothic UI', sans-serif;
+  background: var(--bg);
+  color: var(--text1);
+  overflow: hidden;
+}
+.app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: env(safe-area-inset-top, 0) 0 env(safe-area-inset-bottom, 0);
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.header-title { font-size: 16px; font-weight: 600; color: var(--text1); }
+.sound-toggle {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--text2);
+  background: none; border: none; cursor: pointer; padding: 4px 8px;
+  border-radius: 8px;
+}
+.sound-toggle.on { color: var(--accent); }
+
+/* Scrollable content */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ring */
+.ring-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0 16px;
+}
+.ring-svg { width: 180px; height: 180px; }
+.ring-center {
+  font-size: 32px;
+  font-weight: 300;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+}
+.ring-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.status-text {
+  font-size: 13px;
+  color: var(--text2);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Alert */
+.alert {
+  background: #2a1f08;
+  border: 1px solid var(--warn);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #f0a830;
+  margin-bottom: 12px;
+  display: none;
+}
+.alert.show { display: block; }
+
+/* Buttons */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.btn {
+  flex: 1;
+  padding: 13px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text1);
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn:active { opacity: 0.7; }
+.btn.primary { background: var(--accent); border-color: var(--accent); font-weight: 600; }
+.btn.success-btn { background: var(--success); border-color: var(--success); font-weight: 600; }
+.btn.sm { padding: 9px 12px; font-size: 13px; flex: none; }
+
+/* Exercise panel */
+.ex-panel { display: none; }
+.ex-panel.show { display: block; }
+.ex-label {
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.ex-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.ex-card {
+  background: var(--bg2);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.ex-card.active { border-color: var(--accent); background: #111d2e; }
+.ex-card:active { opacity: 0.7; }
+.ex-icon { font-size: 20px; margin-bottom: 3px; }
+.ex-name { font-size: 11px; color: var(--text2); line-height: 1.3; }
+.ex-dur { font-size: 10px; color: var(--text3); margin-top: 2px; }
+.ex-card.active .ex-name { color: var(--text1); }
+
+.ex-desc {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 10px;
+  min-height: 72px;
+}
+
+.ex-progress-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text3);
+  margin-bottom: 5px;
+}
+.ex-progress {
+  height: 3px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.ex-progress-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 1s linear;
+  width: 0%;
+}
+.ex-nav {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+/* History */
+.history-label {
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.history-dots {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.h-dot {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  color: var(--text3);
+}
+.h-dot.done { background: #1a2f1e; border-color: #3B6D11; color: #6abf78; }
+.h-dot.skip { background: #2a1f08; border-color: var(--warn); color: #f0a830; }
+
+/* Install hint */
+.install-hint {
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--text3);
+  text-align: center;
+  display: none;
+}
+.install-hint.show { display: block; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="header-title">👁 目のやすみ番</div>
+    <button class="sound-toggle on" id="soundBtn" onclick="toggleSound()">🔔 音声</button>
+  </div>
+
+  <div class="content">
+    <div class="ring-wrap">
+      <svg class="ring-svg" viewBox="0 0 180 180">
+        <circle cx="90" cy="90" r="72" fill="none" stroke="var(--border)" stroke-width="10"/>
+        <circle cx="90" cy="90" r="72" fill="none" id="arc"
+          stroke="var(--accent)" stroke-width="10"
+          stroke-dasharray="452.4" stroke-dashoffset="0"
+          stroke-linecap="round" transform="rotate(-90 90 90)"/>
+        <text x="90" y="86" text-anchor="middle" font-size="28" font-weight="300"
+          fill="var(--text1)" font-family="-apple-system,sans-serif" id="timeText">55:00</text>
+        <text x="90" y="106" text-anchor="middle" font-size="12"
+          fill="var(--text2)" font-family="-apple-system,sans-serif" id="subText">作業中</text>
+      </svg>
+      <div class="status-text" id="statusText">開始ボタンで計測スタート</div>
+    </div>
+
+    <div class="alert" id="alertBar"></div>
+
+    <div class="btn-row" id="mainBtns">
+      <button class="btn primary" id="startBtn" onclick="toggleTimer()">▶ 開始</button>
+      <button class="btn" onclick="resetTimer()">↺ リセット</button>
+      <button class="btn" id="skipBtn" style="display:none" onclick="skipBreak()">スキップ</button>
+    </div>
+
+    <div class="ex-panel" id="exPanel">
+      <div class="ex-label">体操メニュー（自動進行）</div>
+      <div class="ex-grid" id="exGrid"></div>
+      <div class="ex-desc" id="exDesc">メニューを選んでください</div>
+      <div class="ex-progress-row">
+        <span id="exTimeLabel">残り 0:00</span>
+        <span id="exTotalLabel">合計 0:00 / 5:00</span>
+      </div>
+      <div class="ex-progress"><div class="ex-progress-bar" id="exBar"></div></div>
+      <div class="ex-nav">
+        <button class="btn sm" onclick="prevEx()">← 前</button>
+        <button class="btn sm" id="nextBtn" onclick="nextEx()">次 →</button>
+        <button class="btn sm success-btn" id="doneBtn" style="display:none" onclick="finishBreak()">✓ 完了</button>
+      </div>
+    </div>
+
+    <div class="history-label">本日の記録</div>
+    <div class="history-dots" id="historyDots">
+      <div class="h-dot">—</div><div class="h-dot">—</div>
+      <div class="h-dot">—</div><div class="h-dot">—</div>
+      <div class="h-dot">—</div><div class="h-dot">—</div>
+      <div class="h-dot">—</div><div class="h-dot">—</div>
+    </div>
+
+    <div class="install-hint" id="installHint">
+      📱 ホーム画面に追加するとアプリのように使えます<br>
+      Safari：共有ボタン →「ホーム画面に追加」<br>
+      Chrome：メニュー →「アプリをインストール」
+    </div>
+  </div>
+</div>
+
+<script>
+const WORK = 55*60, BREAK = 5*60;
+const CIRC = 2*Math.PI*72;
+
+const EXERCISES = [
+  {icon:'👁️', name:'遠くを見る',   dur:60,  desc:'窓の外や遠い壁の一点を見つめます。6m以上先を20秒以上見るのが理想です。目のピント調節筋をリラックスさせます。'},
+  {icon:'↕️', name:'上下左右',     dur:60,  desc:'頭を動かさず目だけをゆっくり上→下→左→右に動かします。各方向5回繰り返します。'},
+  {icon:'🔄', name:'ぐるぐる回す', dur:60,  desc:'目をゆっくり時計回りに1周、次に反時計回りに1周させます。各3回。めまいを感じたら止めてください。'},
+  {icon:'💧', name:'まばたき',     dur:30,  desc:'意識的にゆっくり10回まばたきします。PC作業中はまばたきが減り目が乾燥します。涙の膜を整えます。'},
+  {icon:'🙌', name:'手のひら温め', dur:30,  desc:'両手をこすり合わせて温め、閉じた目の上にそっと当てます。暗さと温かさで緊張がほぐれます。'},
+  {icon:'🧘', name:'首・肩ほぐし', dur:60,  desc:'首をゆっくり左右に傾け、肩を前後に回します。目の疲れは首肩こりと連動しています。'},
+];
+
+let running=false, inBreak=false, soundOn=true;
+let workRemain=WORK, brkRemain=BREAK, exRemain=0, curEx=0;
+let workTid=null, brkTid=null;
+let history=[];
+
+function fmt(s){ const m=Math.floor(s/60),sec=s%60; return `${m}:${sec.toString().padStart(2,'0')}`; }
+
+function updateArc(remain, total, color){
+  const pct = remain/total;
+  const offset = CIRC*(1-pct);
+  const arc = document.getElementById('arc');
+  arc.setAttribute('stroke-dashoffset', offset.toFixed(1));
+  arc.setAttribute('stroke', color);
+}
+
+function showAlert(msg, ms=6000){
+  const bar = document.getElementById('alertBar');
+  bar.textContent = '🔔 '+msg;
+  bar.classList.add('show');
+  if(ms) setTimeout(()=>bar.classList.remove('show'), ms);
+}
+
+function beep(type){
+  if(!soundOn) return;
+  try{
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const patterns = {
+      alert:  [[800,0.2],[1000,0.2],[1200,0.2]],
+      next:   [[900,0.12]],
+      done:   [[1000,0.15],[1200,0.15],[1000,0.15],[1400,0.15]],
+    };
+    let t = ctx.currentTime;
+    (patterns[type]||[]).forEach(([freq,dur])=>{
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value=freq;
+      g.gain.setValueAtTime(0.3,t);
+      g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+      o.start(t); o.stop(t+dur);
+      t+=dur+0.05;
+    });
+  }catch(e){}
+}
+
+function toggleSound(){
+  soundOn=!soundOn;
+  const btn=document.getElementById('soundBtn');
+  btn.textContent = soundOn?'🔔 音声':'🔕 音声';
+  btn.className = 'sound-toggle'+(soundOn?' on':'');
+}
+
+function buildExGrid(){
+  const grid=document.getElementById('exGrid');
+  grid.innerHTML = EXERCISES.map((e,i)=>`
+    <div class="ex-card${i===curEx?' active':''}" onclick="selectEx(${i})">
+      <div class="ex-icon">${e.icon}</div>
+      <div class="ex-name">${e.name}</div>
+      <div class="ex-dur">${e.dur}秒</div>
+    </div>`).join('');
+  document.getElementById('exDesc').textContent = EXERCISES[curEx].desc;
+  const isLast = curEx===EXERCISES.length-1;
+  document.getElementById('nextBtn').style.display = isLast?'none':'';
+  document.getElementById('doneBtn').style.display = isLast?'':'none';
+}
+
+function selectEx(i){ curEx=i; exRemain=EXERCISES[i].dur; buildExGrid(); updateExProgress(); }
+function prevEx(){ if(curEx>0){ curEx--; exRemain=EXERCISES[curEx].dur; buildExGrid(); updateExProgress(); } }
+function nextEx(){ if(curEx<EXERCISES.length-1){ curEx++; exRemain=EXERCISES[curEx].dur; buildExGrid(); updateExProgress(); beep('next'); } }
+
+function updateExProgress(){
+  const dur=EXERCISES[curEx].dur;
+  const elapsed=dur-exRemain;
+  const brkElapsed=BREAK-brkRemain;
+  document.getElementById('exTimeLabel').textContent='残り '+fmt(exRemain);
+  document.getElementById('exTotalLabel').textContent=`合計 ${fmt(brkElapsed)} / 5:00`;
+  document.getElementById('exBar').style.width=(elapsed/dur*100).toFixed(1)+'%';
+}
+
+function updateHistory(){
+  const dots=document.getElementById('historyDots').querySelectorAll('.h-dot');
+  history.forEach((h,i)=>{
+    if(i<dots.length){
+      dots[i].className='h-dot '+(h==='done'?'done':'skip');
+      dots[i].textContent=h==='done'?'✓':'–';
+    }
+  });
+}
+
+function startBreak(){
+  inBreak=true; curEx=0; brkRemain=BREAK; exRemain=EXERCISES[0].dur;
+  document.getElementById('exPanel').classList.add('show');
+  document.getElementById('skipBtn').style.display='';
+  document.getElementById('timeText').textContent=fmt(BREAK);
+  document.getElementById('subText').textContent='体操中';
+  document.getElementById('statusText').textContent='目を休めましょう — 5分間の体操タイム';
+  updateArc(BREAK,BREAK,'#3B8C4B');
+  buildExGrid(); updateExProgress();
+  beep('alert');
+  if('Notification' in window && Notification.permission==='granted'){
+    new Notification('目のやすみ番',{body:'55分経過！目の体操をしましょう👁'});
+  }
+  showAlert('55分経過！目の体操をしましょう', 0);
+  brkTid=setInterval(()=>{
+    brkRemain--; exRemain--;
+    document.getElementById('timeText').textContent=fmt(brkRemain);
+    updateArc(brkRemain,BREAK,'#3B8C4B');
+    updateExProgress();
+    if(exRemain<=0 && curEx<EXERCISES.length-1){
+      curEx++; exRemain=EXERCISES[curEx].dur; buildExGrid(); beep('next');
+    }
+    if(brkRemain<=0){ clearInterval(brkTid); finishBreak(); }
+  },1000);
+}
+
+function finishBreak(){
+  clearInterval(brkTid); inBreak=false;
+  history.push('done'); updateHistory();
+  document.getElementById('exPanel').classList.remove('show');
+  document.getElementById('skipBtn').style.display='none';
+  document.getElementById('alertBar').classList.remove('show');
+  workRemain=WORK;
+  document.getElementById('timeText').textContent=fmt(WORK);
+  document.getElementById('subText').textContent='作業中';
+  updateArc(WORK,WORK,'#2D7DD2');
+  document.getElementById('statusText').textContent='お疲れさまでした！次まで55分あります';
+  showAlert('体操完了！次まで55分、集中して大丈夫です 💪');
+  beep('done');
+  if(running) workTid=setInterval(workTick,1000);
+}
+
+function skipBreak(){
+  clearInterval(brkTid); inBreak=false;
+  history.push('skip'); updateHistory();
+  document.getElementById('exPanel').classList.remove('show');
+  document.getElementById('skipBtn').style.display='none';
+  document.getElementById('alertBar').classList.remove('show');
+  workRemain=WORK;
+  document.getElementById('timeText').textContent=fmt(WORK);
+  document.getElementById('subText').textContent='作業中';
+  updateArc(WORK,WORK,'#2D7DD2');
+  document.getElementById('statusText').textContent='作業中 — スキップしました';
+  if(running) workTid=setInterval(workTick,1000);
+}
+
+function workTick(){
+  workRemain--;
+  document.getElementById('timeText').textContent=fmt(workRemain);
+  updateArc(workRemain,WORK,'#2D7DD2');
+  if(workRemain<=0){ clearInterval(workTid); startBreak(); }
+}
+
+function toggleTimer(){
+  if(inBreak) return;
+  running=!running;
+  const btn=document.getElementById('startBtn');
+  if(running){
+    btn.textContent='⏸ 一時停止'; btn.className='btn';
+    document.getElementById('statusText').textContent='作業中 — 集中して大丈夫です';
+    document.getElementById('alertBar').classList.remove('show');
+    workTid=setInterval(workTick,1000);
+    // 通知許可リクエスト
+    if('Notification' in window && Notification.permission==='default'){
+      Notification.requestPermission();
+    }
+  } else {
+    btn.textContent='▶ 再開'; btn.className='btn primary';
+    document.getElementById('statusText').textContent='一時停止中';
+    clearInterval(workTid);
+  }
+}
+
+function resetTimer(){
+  clearInterval(workTid); clearInterval(brkTid);
+  running=false; inBreak=false; workRemain=WORK;
+  document.getElementById('startBtn').textContent='▶ 開始';
+  document.getElementById('startBtn').className='btn primary';
+  document.getElementById('timeText').textContent='55:00';
+  document.getElementById('subText').textContent='作業中';
+  document.getElementById('statusText').textContent='開始ボタンで計測スタート';
+  document.getElementById('exPanel').classList.remove('show');
+  document.getElementById('skipBtn').style.display='none';
+  document.getElementById('alertBar').classList.remove('show');
+  updateArc(WORK,WORK,'#2D7DD2');
+}
+
+// PWA登録
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+
+// インストールヒント（スマホ判定）
+if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){
+  document.getElementById('installHint').classList.add('show');
+}
+
+updateArc(WORK,WORK,'#2D7DD2');
+</script>
+</body>
+</html>
