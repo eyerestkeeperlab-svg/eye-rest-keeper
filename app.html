@@ -289,6 +289,18 @@ let breakStartAt=null;
 let cfg={sound:true,soundType:0,soundVol:70,soundRepeat:3,vibration:true,notification:false};
 
 // ── 設定 ──
+function hardReload(){
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.getRegistrations().then(regs=>{
+      regs.forEach(r=>r.unregister());
+      caches.keys().then(keys=>{
+        return Promise.all(keys.map(k=>caches.delete(k)));
+      }).then(()=>location.reload(true));
+    });
+  } else {
+    location.reload(true);
+  }
+}
 function closeApp(){
   clearInterval(workTid); clearInterval(brkTid);
   workTid=null; brkTid=null; running=false;
@@ -297,7 +309,7 @@ function closeApp(){
     '<div style="font-size:48px;">👁</div>' +
     '<div style="font-size:22px;font-weight:600;color:#e8edf8;">お疲れさまでした</div>' +
     '<div style="font-size:14px;color:#7e8ba8;line-height:1.8;">目を大切に、良い一日を。<br>スマホのホームボタンを押すか<br>タスク一覧からアプリを閉じてください。</div>' +
-    '<button onclick="location.reload()" style="padding:14px 32px;border-radius:10px;border:1px solid #2D7DD2;background:transparent;color:#2D7DD2;font-size:15px;font-family:inherit;cursor:pointer;">↺ 再起動する</button>' +
+    '<button onclick="hardReload()" style="padding:14px 32px;border-radius:10px;border:1px solid #2D7DD2;background:transparent;color:#2D7DD2;font-size:15px;font-family:inherit;cursor:pointer;">↺ 再起動する</button>' +
     '</div>';
 }
 function loadSettings(){
